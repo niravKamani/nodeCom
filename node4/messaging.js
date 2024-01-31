@@ -1,26 +1,20 @@
 // messaging.js - application2
 
+const util = require('util');
 const { exec } = require('child_process');
+const execAsync = util.promisify(exec);
 
-function initiateReactApp() {
+async function initiateReactApp() {
     // Run 'react-scripts start' to dynamically start the React app
-    const reactAppProcess = exec('serve -s build', {
-        cwd: './node4',
-    });
-
-    // Listen for messages from the React app
-    reactAppProcess.stdout.on('data', (data) => {
-        console.log(`React app stdout: ${data}`);
-    });
-
-    reactAppProcess.stderr.on('data', (data) => {
-        console.error(`React app stderr: ${data}`);
-    });
-
-    // Cleanup resources when the process exits
-    reactAppProcess.on('exit', (code) => {
-        console.log(`React app process exited with code ${code}`);
-    });
+    try {
+        const { stdout, stderr } = await execAsync('npm run start', { cwd: '../node4/node4' });
+        console.log(`stdout: ${stdout}`);
+        console.error(`stderr: ${stderr}`);
+    } catch (error) {
+        console.error(`Error: `, error);
+        return "failure";
+    }
+    return "success";
 }
 
 module.exports = { initiateReactApp };

@@ -1,8 +1,12 @@
 
 // Listen for messages from application1
-process.on('message', (message) => {
+
+const { runCommand } = require('./messaging')
+
+process.on('message', async (message) => {
     console.log(`i am in node 3 : Received message from application1: `, message);
-    message.result = "success";
-    message.action = "testResult"
-    process.send(message);
+    if (message.action === 'startTest') {
+        result = await runCommand();
+        process.send({ action: 'testResult', result });
+    }
 });
