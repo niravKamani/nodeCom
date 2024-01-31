@@ -4,7 +4,7 @@ const { initiateReactApp } = require('./messaging');
 
 // Listen for messages from application1
 process.on('message', async (message) => {
-    console.log('Received message from application1:', message);
+    console.log(`i am in node 4 : Received message from application1: `, message);
     // Check for the startReactApp action
     if (message.action === 'startTest') {
         // Start the React app
