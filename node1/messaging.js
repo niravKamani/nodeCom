@@ -6,21 +6,21 @@ function startTest(path) {
     // Create a child process for application2
     const application2 = fork(path);
 
-    // Send a message to application2 to start the test\
-    const url = 'https://playwright.dev/docs/api/class-playwright';
-    application2.send({ action: 'startTest', url });
+    // Send a message to application2 to start the test
+    application2.send({ action: 'Run' });
 
     // Listen for messages from application2
     application2.on('message', (message) => {
         console.log(`i am in node 1 : Received message from ${path} : ${message}`);
 
         // Handle success or failure messages
-        if (message.action === 'testResult') {
+        if (message.action === 'Task1') {
             console.log(`Test result: ${message.result}`);
+            application2.send({ action: 'Task2' });
         }
 
         // Close the child process when done
-        application2.kill();
+        if (message.action === 'Task2') application2.kill();
     });
 }
 
